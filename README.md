@@ -8,7 +8,10 @@
 
   [new的模拟实现](/js/new的模拟实现.md)
 
+  [手写promise](/js/手写promise.md)
+
   [深浅拷贝](/js/深浅拷贝.md)
 
   [防抖与节流的实现](/js/防抖与节流的实现.md)
+
 
