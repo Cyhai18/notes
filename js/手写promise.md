@@ -58,14 +58,13 @@ function myPromise(fn) {
             that.rejectedCallbacks.map(cb => cb(that.value))
         }
     }
-}
-
-// 这里是执行传入来的函数，并且将之前两个函数当做参数传进去
-// 如果传进来的用户自定义的函数执行报错，需要捕获错误并且执行reject
-try {
-    fn(resolve, reject)
-} catch(e) {
-    reject(e)
+    // 这里是执行传入来的函数，并且将之前两个函数当做参数传进去
+	// 如果传进来的用户自定义的函数执行报错，需要捕获错误并且执行reject
+	try {
+    	fn(resolve, reject)
+	} catch(e) {
+    	reject(e)
+	}
 }
 
 // 实现 then 函数
