@@ -4,9 +4,13 @@
 
 - vue
 
+  [render函数](/vue/render函数.md)
+
   [vue响应式原理](/vue/vue响应式原理.md)
 
   [vue组件相关注意点](/vue/vue组件相关注意点.md)
+
+  [vue组件间通信](/vue/vue组件间通信.md)
 
 - js
 

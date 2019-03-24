@@ -1,4 +1,39 @@
-- `keep-alive`的理解：简单说，就是把一个组件的编译缓存起来，避免组件的重复渲染。
+- 在使用组件时，也可以传入一些标准的 html 特性，比如 id、class：
+
+  ```html
+  <i-button id="btn1" class="btn-submit"></i-button>
+  ```
+
+  这样的 html 特性，在组件内的元素上会继承，并不需要在 props 里再定义一遍。这个特性是默认支持的，如果想禁用，在组件选项里配置`inheritAttrs: false`就可以了。
+
+- 项目足够复杂的话，可以使用 Vue 的混合`mixins`，将不同的逻辑分开到不同的 js 文件里。
+
+  ```vue
+  // app.vue
+  <script>
+  	import mixins_user from '../mixins/user.js'
+      export default {
+          mixins: [mixins_user],
+          data() {
+              return {}
+          }
+      }
+  </script>
+  ```
+
+- `keep-alive`的理解：简单说，**就是把一个组件的编译缓存起来，避免组件的重复渲染**。
+
+  > 组件的切换，是会重新渲染的，如果是频繁的切换，必然会导致性能问题，为了避免组件的重复渲染，可以在组件的标签外层套一个 Vue.js 内置的`<keep-alive>`组件，这样组件就会被缓存起来。
+
+  keep-alive 还有一些额外的 props 可以配置：
+
+  - include：字符串或正则表达式，只有名称匹配的组件会被缓存
+  - exclude：字符串或正则表达式，任何名称匹配的组件都不会被缓存
+  - max：数字，最多可以缓存多少组件实例
+
+  > 可以在组件中定义 mounted 和 beforeDestroy 这两个生命钩子，如果用了 keep-alive 的话，只有 mounted 触发了，beforeDestroy 不会被触发（触发的话证明组件在重新渲染），说明组件已经被缓存了。
+
+  keep-alive 比较适合用于同一个页面中不同组件间的切换。
 
 - `v-once`只渲染元素和组件**一次**，随后的重新渲染，元素/组件及其所有的子节点将被视为静态内容并跳过，这可以用于优化更新性能。
 
@@ -113,6 +148,8 @@
   任意点击一个组件，3个数字都会加1，这就是引用外部对象的后果，所以给组件返回一个新的 data 对象来独立。
 
 - 父组件向子组件传递数据会用到`props`。在组件中，使用选项`props`来声明需要从父级接收的数据，`props`的值可以是两种，字符串数组或者对象。
+
+  > prop 定义了这个组件有哪些可配置的属性，组件的核心功能也都是它来确定的。
 
   由于 HTML 特性不区分大小写，当使用 DOM 模板时，驼峰命名（camelCase）的 props 名称要转为短横分隔命名（kebab-case）。
 
@@ -352,6 +389,24 @@
 
 - 组件在它的模板内可以递归地调用自己，只要给组件设置 name 的选项就可以了。注意的是，必须给一个条件来限制递归数量，否则会抛出错误。
 
+  ```html
+  // 一般会在递归组件上用v-if在某个地方设置为false来终结
+  <template>
+  	<div><my-component :count="count + 1" v-if="count <= 5"></my-component></div>
+  </template>
+  <script>
+      export default {
+          name: 'my-component',
+          props: {
+              count: {
+                  type: Number,
+                  default: 1
+              }
+          }
+      }
+  </script>
+  ```
+
 - Vue 提供了一个内联模板的功能，在使用组件时，给组件标签使用`inline-template`特性，组件就会把它的内容当作模板，而不是把它当内容分发，这样模板更灵活。父组件的数据和子组件的数据都可以渲染（如果同名，优先使用子组件的数据），这反而是内联模板的缺点。
 
   ```html
@@ -437,7 +492,10 @@
               return { name: "chen" }
           }
       })
+      // 在$mount里写参数来指定挂载的节点
       new myComponent().$mount('#mount-div')
+      // 不用$mount，直接在创建实例时指定el选项
+      // new myComponent({ el: '#mount-div' })
   </script>
   ```
 
