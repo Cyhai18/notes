@@ -1,3 +1,7 @@
+#### 作用
+
+在特定的作用域中调用函数，也就是等于重新设置函数体内 this 对象的值。
+
 #### 思路
 
 举个简单例子：
@@ -133,7 +137,28 @@ if(typeof this !== 'function') {
 
 接下来顺便引出来其他一些内部属性和方法：
 
-迟点补上
+- 在函数内部，有两个特殊的对象：arguments、this
+
+  - arguments 是一个类数组对象，包含传入函数中的所有参数。
+
+  - arguments 对象还有一个属性为：callee，是一个指针，指向拥有这个 arguments 对象的函数。
+
+    ```javascript
+    function factorial(num) {
+        if (num <= 1) {
+            return 1
+        } else {
+            // return num * factorial(num-1)
+            return num * arguments.callee(num-1)
+        }
+    }
+    ```
+
+  - 另一个属性：caller，这个属性保存着调用当前函数的函数的引用。
+
+  - 还包含两个属性：length、prototype。length 表示形参的个数。
+
+  - 还有方法：apply()、call()、bind()
 
 #### 参考
 
